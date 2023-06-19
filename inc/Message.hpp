@@ -11,6 +11,7 @@ class	Message
 		std::string	_hostName;
 		std::string	_cmd;
 		std::vector<std::string>	_param;
+		int			fillIdx;
 	public:
 		Message(void);
 		~Message(void);

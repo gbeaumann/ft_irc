@@ -1,4 +1,4 @@
-#include "Message.hpp"
+#include "../inc/Message.hpp"
 
 Message::Message(void) : _nick(""), _hostName(""), _cmd("") {}
 
@@ -29,21 +29,19 @@ int	Message::checkCmd(std::string toCheck)
 
 void	Message::fillData(std::string	data)
 {
-	static int	i = 0;
-	
-	switch	(i)
+	switch	(this->fillIdx)
 	{
 		case 0:
 			this->_nick = data;
-			i++;
+			this->fillIdx++;
 			break;
 		case 1:
 			this->_hostName = data;
-			i++;
+			this->fillIdx++;
 			break;
 		case 2:
 			this->_cmd = data;
-			i++;
+			this->fillIdx++;
 			break;
 		case 3:
 			this->_param.push_back(data);
@@ -71,6 +69,8 @@ void	Message::msgParsing(std::string toParse)
 	int pos = 0;
 	int	pos2 = 0;
 	std::string	stock;
+	this->fillIdx = 0;
+
 	if (toParse == "")
 	{
 		std::cout << "Error: Empty message" << std::endl;
@@ -81,7 +81,8 @@ void	Message::msgParsing(std::string toParse)
 	while ((pos = toParse.find(" ")) < toParse.find(":"))
 	{
 		if ((pos2 = toParse.find("!")) < toParse.find(":"))
-		{	stock = toParse.substr(0, pos2);
+		{	
+			stock = toParse.substr(0, pos2);
 			this->pars.push_back(stock);
 			toParse.erase(0, pos2 + 1);
 		}
