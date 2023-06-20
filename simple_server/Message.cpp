@@ -70,8 +70,15 @@ void	Message::msgParsing(std::string toParse)
 	int	pos2 = 0;
 	std::string	stock;
 	this->fillIdx = 0;
+	int	endl;
 
-	if (toParse == "")
+	if (toParse.find('\n'))
+	{
+		endl = toParse.find('\n');
+		toParse.erase(endl, toParse.npos);
+	}
+
+	if (toParse[0] == '\n')
 	{
 		std::cout << "Error: Empty message" << std::endl;
 		return;
@@ -96,15 +103,26 @@ void	Message::msgParsing(std::string toParse)
 	toParse.erase(0, 1);
 	this->pars.push_back(toParse);
 
+	std::vector<std::string>::iterator	it = this->pars.begin();
+	for (; it != this->pars.end(); it++)
+	{
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
+
 	this->splitData();
-	
+	if (this->_cmd == "")
+	this->printTest();
+	this->clearParam();
 	this->printTest();
 }
 
 void	Message::clearParam(void)
 {
-	if (!(this->_param.empty()))
-		this->_param.clear();
+	this->_nick = "";
+	this->_hostName = "";
+	this->_cmd = "";
+	this->_param.clear();
 }
 
 void	Message::printTest(void)
