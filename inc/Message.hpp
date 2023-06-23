@@ -8,6 +8,7 @@ class	Message
 {
 	private:
 		std::string	_nick;
+		std::string	_user;
 		std::string	_hostName;
 		std::string	_cmd;
 		std::vector<std::string>	_param;
