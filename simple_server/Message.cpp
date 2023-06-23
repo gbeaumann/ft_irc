@@ -36,14 +36,18 @@ void	Message::fillData(std::string	data)
 			this->fillIdx++;
 			break;
 		case 1:
-			this->_hostName = data;
+			this->_user = data;
 			this->fillIdx++;
 			break;
 		case 2:
-			this->_cmd = data;
+			this->_hostName = data;
 			this->fillIdx++;
 			break;
 		case 3:
+			this->_cmd = data;
+			this->fillIdx++;
+			break;
+		case 4:
 			this->_param.push_back(data);
 			break;
 	}
@@ -70,12 +74,12 @@ void	Message::msgParsing(std::string toParse)
 	int	pos2 = 0;
 	std::string	stock;
 	this->fillIdx = 0;
-	int	endl;
+	int	endlPos;
 
 	if (toParse.find('\n'))
 	{
-		endl = toParse.find('\n');
-		toParse.erase(endl, toParse.npos);
+		endlPos = toParse.find('\n');
+		toParse.erase(endlPos, toParse.npos);
 	}
 
 	if (toParse[0] == '\n')
@@ -93,6 +97,12 @@ void	Message::msgParsing(std::string toParse)
 			this->pars.push_back(stock);
 			toParse.erase(0, pos2 + 1);
 		}
+		else if ((pos2 = toParse.find("@")) < toParse.find(":"))
+		{	
+			stock = toParse.substr(0, pos2);
+			this->pars.push_back(stock);
+			toParse.erase(0, pos2 + 1);
+		}
 		else
 		{
 			stock = toParse.substr(0, pos);
@@ -100,21 +110,13 @@ void	Message::msgParsing(std::string toParse)
 			toParse.erase(0, pos + 1);
 		}
 	}
-	toParse.erase(0, 1);
+	if (toParse.find(":") == 0)
+		toParse.erase(0, 1);
 	this->pars.push_back(toParse);
 
-	std::vector<std::string>::iterator	it = this->pars.begin();
-	for (; it != this->pars.end(); it++)
-	{
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl;
-
 	this->splitData();
-	if (this->_cmd == "")
 	this->printTest();
 	this->clearParam();
-	this->printTest();
 }
 
 void	Message::clearParam(void)
@@ -127,11 +129,15 @@ void	Message::clearParam(void)
 
 void	Message::printTest(void)
 {
-	std::cout << "Nick: " << this->_nick << ", Hostname: " << this->_hostName << ", Cmd: " << this->_cmd << ", Params: ";
+	std::cout << "Nick: " << this->_nick << std::endl;
+	std::cout << "User: " << this->_user << std::endl;
+	std::cout << "Hostname: " << this->_hostName << std::endl;
+	std::cout << "Cmd: " << this->_cmd << std::endl;
+	std::cout << "Params: ";
 	std::vector<std::string>::iterator	it = this->_param.begin();
 	for (; it != this->_param.end(); it++)
 	{
-		std::cout << *it << " ";
+		std::cout << *it << " | ";
 	}
 	std::cout << std::endl;
 }

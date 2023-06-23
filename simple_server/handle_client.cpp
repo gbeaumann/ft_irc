@@ -8,7 +8,6 @@
 #include <string>
 #include <iostream>
 #include <unistd.h>
-#include <cstring> // memset
 
 #include "../inc/Message.hpp"
 
@@ -46,7 +45,6 @@ void	handle_client(int sd, int &max_sd, fd_set &master_set)
 
 		printf("  %d bytes received\n", rc);
 		printf("  %s\n", buffer);
-		//memset(buffer, 0, sizeof(buffer));
 	}
 
 	if (close_conn)
